@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday! ✨</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;600&family=Pacifico&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #1a1a1a, #4a4a4a);
+        color: #fff;
+        font-family: "Quicksand", sans-serif;
+        min-height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .message {
+        position: absolute;
+        text-align: center;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.5s ease;
+        width: 90%;
+        max-width: 500px;
+        padding: 0 20px;
+      }
+
+      .message.active {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .chat-container {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+        padding: 15px;
+        background: rgba(37, 37, 37, 0.9);
+        border-radius: 25px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      .chat-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .chat-app-name {
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+
+      .chat-bubble {
+        background: #0b93f6;
+        border-radius: 20px;
+        padding: 12px 20px;
+        margin: 8px 0;
+        max-width: 100%;
+        word-wrap: break-word;
+        font-size: 1rem;
+        position: relative;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: bubbleAppear 0.5s forwards;
+      }
+
+      @keyframes bubbleAppear {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .star {
+        position: absolute;
+        background: #fff;
+        border-radius: 50%;
+        animation: twinkle 1s infinite;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      h1 {
+        font-size: clamp(2rem, 8vw, 2.5rem);
+        margin-bottom: 1rem;
+        font-family: "Dancing Script", cursive;
+        background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      p {
+        font-family: "Pacifico", cursive;
+        font-size: clamp(1rem, 4vw, 1.3rem);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        color: #e6e6e6;
+      }
+
+      .highlight-special {
+        display: inline-block;
+        position: relative;
+        color: #ff6b6b;
+        animation: pulse 2s infinite;
+        font-family: "Dancing Script", cursive;
+        font-size: 1.5em;
+      }
+
+      .floating-hearts {
+        position: absolute;
+        pointer-events: none;
+      }
+
+      .floating-heart {
+        position: absolute;
+        font-size: 1.2rem;
+        color: #ff6b6b;
+        animation: float 3s ease-in forwards;
+        opacity: 0;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+          opacity: 0;
+        }
+        20% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translate(var(--tx), -100px) rotate(var(--rot));
+          opacity: 0;
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .restart-btn {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 24px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        color: white;
+        cursor: pointer;
+        font-family: "Quicksand", sans-serif;
+        opacity: 0;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+      }
+
+      .restart-btn.show {
+        opacity: 1;
+      }
+
+      .typing-indicator {
+        display: flex;
+        padding: 8px;
+        gap: 4px;
+        opacity: 0;
+        animation: fadeIn 0.5s forwards;
+      }
+
+      .typing-dot {
+        width: 8px;
+        height: 8px;
+        background: #90939980;
+        border-radius: 50%;
+        animation: typingBounce 1s infinite;
+      }
+
+      .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typingBounce {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0);
+        }
+        30% {
+          transform: translateY(-4px);
+        }
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stars"></div>
+
+    <div class="container">
+      <div class="message" data-index="0">
+        <h1 class="animate__animated animate__fadeIn">Hey [Name]! ✨</h1>
+      </div>
+
+      <div class="message" data-index="1">
+        <div class="chat-container">
+          <div class="chat-header">
+            <div class="chat-app-name">Birthday Message</div>
+          </div>
+          <div class="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+          <div class="chat-bubble" style="animation-delay: 1.5s">
+            Happy Birthday! Many many happy returns of the day! 🎉
+          </div>
+          <div class="chat-bubble" style="animation-delay: 2.5s">
+            Hope you have an amazing day! 🎈
+          </div>
+        </div>
+      </div>
+
+      <div class="message" data-index="2">
+        <div class="chat-container">
+          <div class="chat-bubble">This was what I was going to do...</div>
+        </div>
+      </div>
+
+      <div class="message" data-index="3">
+        <p>But then I realized...</p>
+        <p>That's not enough for someone like you</p>
+      </div>
+
+      <div class="message" data-index="4">
+        <h1>Because you are</h1>
+        <p class="highlight-special">Special ♥</p>
+      </div>
+
+      <div class="message" data-index="5">
+        <h1>✨ So here's my wish... ✨</h1>
+      </div>
+
+      <div class="message" data-index="6">
+        <h1>Your bright smile</h1>
+        <p>and kind heart make</p>
+        <p>the world a better place</p>
+      </div>
+
+      <div class="message" data-index="7">
+        <h1>✨</h1>
+        <p>Wishing you a day</p>
+        <p>as wonderful as you are!</p>
+        <p class="highlight-special">♥</p>
+      </div>
+    </div>
+
+    <button class="restart-btn">Play Again</button>
+
+    <script>
+      // ... [Previous JavaScript code remains the same] ...
+      function createStars() {
+        const starsContainer = document.querySelector(".stars");
+        for (let i = 0; i < 100; i++) {
+          const star = document.createElement("div");
+          star.className = "star";
+          star.style.width = Math.random() * 3 + "px";
+          star.style.height = star.style.width;
+          star.style.left = Math.random() * 100 + "vw";
+          star.style.top = Math.random() * 100 + "vh";
+          star.style.animationDelay = Math.random() * 1 + "s";
+          starsContainer.appendChild(star);
+        }
+      }
+
+      function createFloatingHearts(element) {
+        const heartsContainer = document.createElement("div");
+        heartsContainer.className = "floating-hearts";
+        element.appendChild(heartsContainer);
+
+        for (let i = 0; i < 15; i++) {
+          setTimeout(() => {
+            const heart = document.createElement("div");
+            heart.className = "floating-heart";
+            heart.innerHTML = "♥";
+            heart.style.setProperty("--tx", Math.random() * 200 - 100 + "px");
+            heart.style.setProperty("--rot", Math.random() * 360 + "deg");
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 3000);
+          }, i * 200);
+        }
+      }
+
+      function showMessage(index) {
+        const messages = document.querySelectorAll(".message");
+        messages.forEach((msg) => msg.classList.remove("active"));
+
+        if (index < messages.length) {
+          const currentMessage = messages[index];
+          currentMessage.classList.add("active");
+
+          if (index === 4) {
+            const specialText =
+              currentMessage.querySelector(".highlight-special");
+            createFloatingHearts(specialText);
+          }
+
+          // Longer delay for the chat message animation
+          const delay = index === 1 ? 5000 : 3000;
+          setTimeout(() => showMessage(index + 1), delay);
+        } else {
+          document.querySelector(".restart-btn").classList.add("show");
+        }
+      }
+
+      document.querySelector(".restart-btn").addEventListener("click", () => {
+        document.querySelector(".restart-btn").classList.remove("show");
+        showMessage(0);
+      });
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        createStars();
+        showMessage(0);
+      });
+    </script>
+
+    <div class="message" data-index="3">
+      <div class="image-container">
+        <img
+          src="/img/Shee-removebg-preview.png"
+          alt="Birthday Image"
+          id="birthday-image"
+          class="responsive-image"
+        />
+        <img
+          src="/img/bday-cap.png"
+          alt="Birthday Cap"
+          class="birthday-cap"
+          id="birthday-cap"
+        />
+      </div>
+    </div>
+
+    <style>
+      .image-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      .responsive-image {
+        width: 100%;
+        max-width: 120px; /* Adjust max-width as needed */
+        height: auto;
+      }
+
+      .birthday-cap {
+        position: absolute;
+        top: 42px; /* Adjust position as needed */
+        left: 49%;
+        transform: translateX(-50%);
+        width: 40px; /* Adjust size as needed */
+        height: auto;
+        display: none; /* Initially hidden */
+        animation: float 2s forwards; /* Call this to animate the cap */
+      }
+
+      @keyframes float {
+        0% {
+          transform: translate(-50%, 0) rotate(0);
+        }
+        100% {
+          transform: translate(-50%, -30px) rotate(360deg);
+        }
+      }
+    </style>
+
+    <script>
+      const birthdayImage = document.getElementById("birthday-image");
+      const birthdayCap = document.getElementById("birthday-cap");
+
+      // Show the image after the last message
+      function showBirthdayImage() {
+        birthdayImage.parentElement.style.display = "flex"; // Show the container
+        birthdayCap.style.display = "block"; // Show the cap
+        birthdayCap.classList.add("birthday-cap-animation");
+      }
+
+      // Call the function to show the birthday image
+      setTimeout(showBirthdayImage, 3000); // Adjust the delay as needed
+    </script>
+  </body>
+</html>
