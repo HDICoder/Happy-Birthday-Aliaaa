@@ -633,57 +633,48 @@
     </div>
 
     <script>
+      // Function to get current GST date and time
       function getGSTDate() {
         const date = new Date();
-        const offsetMinutes = date.getTimezoneOffset();
-        const GSTOffsetMinutes = -240;
+        // Convert current date to UTC then add GST offset (4 hours ahead of UTC)
         return new Date(
-          date.getTime() + (offsetMinutes + GSTOffsetMinutes) * 60000
+          date.getTime() + (4 * 60 - date.getTimezoneOffset()) * 60000
         );
       }
 
-      // Set target date to November 4, 12 AM GST
+      // Set target date to Dubai's midnight on November 4
       const targetDate = new Date("2024-11-04T00:00:00+04:00");
 
       function updateTimer() {
-        const now = getGSTDate();
+        const now = new Date();
         const timeLeft = targetDate - now;
 
         if (timeLeft <= 0) {
-          const countdownContainer = document.getElementById(
-            "countdown-container"
-          );
-          const contentContainer = document.getElementById("content-container");
-
-          countdownContainer.classList.add("fade-out");
-
-          setTimeout(() => {
-            countdownContainer.style.display = "none";
-            contentContainer.style.display = "contents";
-          }, 1000);
+          // Countdown has ended, show the content
+          document.getElementById("countdown-container").style.display = "none";
+          document.getElementById("content-container").style.display =
+            "contents";
+          createStars();
+          showMessage(0);
           return;
         }
 
-        // Calculate time units
+        // Calculate time left in hours, minutes, and seconds
         const hours = Math.floor(timeLeft / (1000 * 60 * 60));
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-        // Update DOM with animation
-        ["hours", "minutes", "seconds"].forEach((unit, index) => {
-          const element = document.getElementById(unit);
-          const value = String([hours, minutes, seconds][index]).padStart(
-            2,
-            "0"
-          );
-          if (element.textContent !== value) {
-            element.style.transform = "scale(1.1)";
-            element.textContent = value;
-            setTimeout(() => {
-              element.style.transform = "scale(1)";
-            }, 100);
-          }
-        });
+        // Update countdown display
+        document.getElementById("hours").textContent = String(hours).padStart(
+          2,
+          "0"
+        );
+        document.getElementById("minutes").textContent = String(
+          minutes
+        ).padStart(2, "0");
+        document.getElementById("seconds").textContent = String(
+          seconds
+        ).padStart(2, "0");
 
         requestAnimationFrame(updateTimer);
       }
@@ -691,13 +682,15 @@
       // Start the countdown
       updateTimer();
 
-      // Check if we should show content immediately
+      // Immediate check on page load for expired countdown
       window.addEventListener("load", () => {
-        const now = getGSTDate();
+        const now = new Date();
         if (now >= targetDate) {
           document.getElementById("countdown-container").style.display = "none";
           document.getElementById("content-container").style.display =
             "contents";
+          createStars();
+          showMessage(0);
         }
       });
 
@@ -744,7 +737,7 @@
           const currentMessage = messages[index];
           currentMessage.classList.add("active");
 
-          if (index === 5) {
+          if (index === 7) {
             const specialText =
               currentMessage.querySelector(".highlight-special");
             createFloatingHearts(specialText);
