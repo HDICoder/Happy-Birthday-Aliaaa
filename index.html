@@ -3,12 +3,176 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Happy Birthday! ✨</title>
+    <title>Birthday Countdown</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
     <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #ffe5e5 0%, #fff0f5 100%);
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+      }
+
+      .countdown-container {
+        text-align: center;
+        padding: 3rem;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(255, 192, 203, 0.2);
+        animation: fadeIn 1s;
+        position: fixed;
+        z-index: 1000;
+        max-width: 600px;
+        width: 90%;
+      }
+
+      .timer {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 2rem 0;
+        background: rgba(255, 182, 193, 0.1);
+        padding: 2rem;
+        border-radius: 15px;
+      }
+
+      .time-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+
+      .time-section::after {
+        content: "♥";
+        position: absolute;
+        color: #ff69b4;
+        font-size: 1.2rem;
+        top: -10px;
+        right: -15px;
+        animation: pulse 2s infinite;
+      }
+
+      .time-value {
+        font-size: 4rem;
+        font-weight: bold;
+        color: #ff69b4;
+        min-width: 100px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        font-family: "Arial Rounded MT Bold", Arial, sans-serif;
+      }
+
+      .time-label {
+        font-size: 1rem;
+        color: #ff69b4;
+        text-transform: uppercase;
+        margin-top: 0.5rem;
+        letter-spacing: 2px;
+        font-weight: bold;
+      }
+
+      .count-message {
+        font-size: 2rem;
+        color: #ff69b4;
+        margin-bottom: 2rem;
+        font-family: "Arial Rounded MT Bold", Arial, sans-serif;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .romantic-text {
+        font-size: 1.2rem;
+        color: #ff8da1;
+        margin-top: 2rem;
+        font-style: italic;
+      }
+
+      /* Floating hearts animation */
+      .floating-hearts {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .heart {
+        position: absolute;
+        font-size: 1.5rem;
+        animation: float 6s infinite;
+        opacity: 0.6;
+        color: #ff69b4;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        50% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(-100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      #content-container {
+        display: none;
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      .fade-out {
+        animation: fadeOut 1s forwards;
+      }
+
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
+      /* Responsive design */
+      @media (max-width: 600px) {
+        .timer {
+          gap: 1rem;
+          padding: 1rem;
+        }
+
+        .time-value {
+          font-size: 2.5rem;
+          min-width: 70px;
+        }
+
+        .message {
+          font-size: 1.5rem;
+        }
+      }
+
+      /* OLD CODE */
+
       @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;600&family=Pacifico&display=swap");
 
       * {
@@ -54,6 +218,68 @@
         transform: scale(1);
       }
 
+      .profile-container {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 2rem;
+        animation: profileAppear 1s ease-out forwards;
+      }
+
+      @keyframes profileAppear {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .profile-frame {
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        border: 3px solid #ff6b6b;
+        border-radius: 50%;
+        animation: frameRotate 10s linear infinite;
+      }
+
+      .profile-frame::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        right: -15px;
+        bottom: -15px;
+        border: 3px solid #ffd93d;
+        border-radius: 50%;
+        animation: frameRotate 15s linear infinite reverse;
+      }
+
+      @keyframes frameRotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .profile-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      }
+
+      /* ... [Previous styles remain exactly the same] ... */
+
       .chat-container {
         width: 100%;
         max-width: 320px;
@@ -91,6 +317,7 @@
         position: relative;
         opacity: 0;
         transform: translateY(20px);
+        color: #fff;
         animation: bubbleAppear 0.5s forwards;
       }
 
@@ -139,7 +366,7 @@
 
       p {
         font-family: "Pacifico", cursive;
-        font-size: clamp(1rem, 4vw, 1.3rem);
+        font-size: clamp(1.5rem, 4vw, 1.3rem);
         line-height: 1.6;
         margin-bottom: 1.5rem;
         color: #e6e6e6;
@@ -253,72 +480,228 @@
           opacity: 1;
         }
       }
+
+      /*  GPT */
+
+      .image-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      .responsive-image {
+        width: 100%;
+        max-width: 120px; /* Adjust max-width as needed */
+        height: auto;
+      }
+
+      .birthday-cap {
+        position: absolute;
+        top: 42px; /* Adjust position as needed */
+        left: 49%;
+        transform: translateX(-50%);
+        width: 40px; /* Adjust size as needed */
+        height: auto;
+        display: none; /* Initially hidden */
+        animation: float 2s forwards; /* Call this to animate the cap */
+      }
+
+      @keyframes float {
+        0% {
+          transform: translate(-50%, 0) rotate(0);
+        }
+        100% {
+          transform: translate(-50%, -30px) rotate(360deg);
+        }
+      }
     </style>
   </head>
   <body>
-    <div class="stars"></div>
-
-    <div class="container">
-      <div class="message" data-index="0">
-        <h1 class="animate__animated animate__fadeIn">Heyyy Aliaa! ✨</h1>
-      </div>
-
-      <div class="message" data-index="1">
-        <div class="chat-container">
-          <div class="chat-header">
-            <div class="chat-app-name">Birthday Message</div>
-          </div>
-          <div class="typing-indicator">
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-          </div>
-          <div class="chat-bubble" style="animation-delay: 1.5s">
-            Happy Birthday! Many many happy returns of the day! 🎉
-          </div>
-          <div class="chat-bubble" style="animation-delay: 2.5s">
-            Hope you have an amazing day! 🎈
-          </div>
+    <div id="countdown-container" class="countdown-container">
+      <div class="count-message">Counting down to a special moment... ✨</div>
+      <div class="timer">
+        <div class="time-section">
+          <div id="hours" class="time-value">00</div>
+          <div class="time-label">Hours</div>
+        </div>
+        <div class="time-section">
+          <div id="minutes" class="time-value">00</div>
+          <div class="time-label">Minutes</div>
+        </div>
+        <div class="time-section">
+          <div id="seconds" class="time-value">00</div>
+          <div class="time-label">Seconds</div>
         </div>
       </div>
-
-      <div class="message" data-index="2">
-        <div class="chat-container">
-          <div class="chat-bubble">This was what I was going to do...</div>
-        </div>
-      </div>
-
-      <div class="message" data-index="3">
-        <p>But then I realized...</p>
-        <p>That's not enough for someone like you</p>
-      </div>
-
-      <div class="message" data-index="4">
-        <h1>Because you are</h1>
-        <p class="highlight-special">Special ♥</p>
-      </div>
-
-      <div class="message" data-index="5">
-        <h1>✨ So here's my wish... ✨</h1>
-      </div>
-
-      <div class="message" data-index="6">
-        <h1>Your bright smile</h1>
-        <p>and kind heart make</p>
-        <p>the world a better place</p>
-      </div>
-
-      <div class="message" data-index="7">
-        <h1>✨</h1>
-        <p>Wishing you a day</p>
-        <p>as wonderful as you are!</p>
-        <p class="highlight-special">♥</p>
+      <div class="romantic-text">
+        Every second brings closer to the magic... ♥
       </div>
     </div>
 
-    <button class="restart-btn">Play Again</button>
+    <div id="content-container">
+      <!-- Your original content here -->
+      <div class="stars"></div>
+
+      <div class="container">
+        <div class="message" data-index="0">
+          <div class="profile-container">
+            <div class="profile-frame"></div>
+            <img
+              src="img/Shee-removebg-preview.png"
+              alt="Birthday Person"
+              class="profile-image"
+            />
+          </div>
+          <h1 class="animate__animated animate__fadeIn">Heyyy Aliaa! ✨</h1>
+        </div>
+
+        <div class="message" data-index="1">
+          <div class="chat-container">
+            <div class="chat-header">
+              <div class="chat-app-name">Birthday Message</div>
+            </div>
+            <div class="typing-indicator">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+            <div class="chat-bubble" style="animation-delay: 1.5s">
+              Happy Birthday! Many many happy returns of the day! 🎉
+            </div>
+            <div class="chat-bubble" style="animation-delay: 2.5s">
+              Hope you have an amazing day! 🎈
+            </div>
+          </div>
+        </div>
+
+        <div class="message" data-index="2">
+          <div class="chat-container">
+            <div class="chat-bubble">This was what I was going to do...</div>
+          </div>
+        </div>
+
+        <div class="message" data-index="3">
+          <p>But then I realized...</p>
+          <p>That's not enough for someone like you</p>
+        </div>
+
+        <div class="message" data-index="4">
+          <h1>Because you are</h1>
+          <p class="highlight-special">Special ♥</p>
+        </div>
+
+        <div class="message" data-index="5">
+          <h1>✨ So here's my wish... ✨</h1>
+        </div>
+
+        <div class="message" data-index="6">
+          <h1>Your bright smile</h1>
+          <p>and kind heart make</p>
+          <p>the world a better place</p>
+        </div>
+
+        <div class="message" data-index="7">
+          <h1>✨</h1>
+          <p>Wishing you a day</p>
+          <p>as wonderful as you are!</p>
+          <p class="highlight-special">♥</p>
+        </div>
+      </div>
+
+      <!-- GPT -->
+
+      <div class="message" data-index="3">
+        <div class="image-container">
+          <img
+            src="/img/Shee-removebg-preview.png"
+            alt="Birthday Image"
+            id="birthday-image"
+            class="responsive-image"
+          />
+          <img
+            src="/img/bday-cap.png"
+            alt="Birthday Cap"
+            class="birthday-cap"
+            id="birthday-cap"
+          />
+        </div>
+      </div>
+
+      <button class="restart-btn">Play Again</button>
+    </div>
 
     <script>
+      function getGSTDate() {
+        const date = new Date();
+        const offsetMinutes = date.getTimezoneOffset();
+        const GSTOffsetMinutes = -240;
+        return new Date(
+          date.getTime() + (offsetMinutes + GSTOffsetMinutes) * 60000
+        );
+      }
+
+      // Set target date to November 4, 12 AM GST
+      const targetDate = new Date("2024-11-04T00:00:00+04:00");
+
+      function updateTimer() {
+        const now = getGSTDate();
+        const timeLeft = targetDate - now;
+
+        if (timeLeft <= 0) {
+          const countdownContainer = document.getElementById(
+            "countdown-container"
+          );
+          const contentContainer = document.getElementById("content-container");
+
+          countdownContainer.classList.add("fade-out");
+
+          setTimeout(() => {
+            countdownContainer.style.display = "none";
+            contentContainer.style.display = "contents";
+          }, 1000);
+          return;
+        }
+
+        // Calculate time units
+        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        // Update DOM with animation
+        ["hours", "minutes", "seconds"].forEach((unit, index) => {
+          const element = document.getElementById(unit);
+          const value = String([hours, minutes, seconds][index]).padStart(
+            2,
+            "0"
+          );
+          if (element.textContent !== value) {
+            element.style.transform = "scale(1.1)";
+            element.textContent = value;
+            setTimeout(() => {
+              element.style.transform = "scale(1)";
+            }, 100);
+          }
+        });
+
+        requestAnimationFrame(updateTimer);
+      }
+
+      // Start the countdown
+      updateTimer();
+
+      // Check if we should show content immediately
+      window.addEventListener("load", () => {
+        const now = getGSTDate();
+        if (now >= targetDate) {
+          document.getElementById("countdown-container").style.display = "none";
+          document.getElementById("content-container").style.display =
+            "contents";
+        }
+      });
+
+      // OLDD CODEE
       // ... [Previous JavaScript code remains the same] ...
       function createStars() {
         const starsContainer = document.querySelector(".stars");
@@ -361,13 +744,12 @@
           const currentMessage = messages[index];
           currentMessage.classList.add("active");
 
-          if (index === 4) {
+          if (index === 5) {
             const specialText =
               currentMessage.querySelector(".highlight-special");
             createFloatingHearts(specialText);
           }
 
-          // Longer delay for the chat message animation
           const delay = index === 1 ? 5000 : 3000;
           setTimeout(() => showMessage(index + 1), delay);
         } else {
@@ -380,67 +762,13 @@
         showMessage(0);
       });
 
-      // Initialize
       document.addEventListener("DOMContentLoaded", () => {
         createStars();
         showMessage(0);
       });
-    </script>
 
-    <div class="message" data-index="3">
-      <div class="image-container">
-        <img
-          src="img/Shee-removebg-preview.png"
-          alt="Birthday Image"
-          id="birthday-image"
-          class="responsive-image"
-        />
-        <img
-          src="img/bday-cap.png"
-          alt="Birthday Cap"
-          class="birthday-cap"
-          id="birthday-cap"
-        />
-      </div>
-    </div>
+      // gpt
 
-    <style>
-      .image-container {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 20px;
-      }
-
-      .responsive-image {
-        width: 100%;
-        max-width: 120px; /* Adjust max-width as needed */
-        height: auto;
-      }
-
-      .birthday-cap {
-        position: absolute;
-        top: 42px; /* Adjust position as needed */
-        left: 49%;
-        transform: translateX(-50%);
-        width: 40px; /* Adjust size as needed */
-        height: auto;
-        display: none; /* Initially hidden */
-        animation: float 2s forwards; /* Call this to animate the cap */
-      }
-
-      @keyframes float {
-        0% {
-          transform: translate(-50%, 0) rotate(0);
-        }
-        100% {
-          transform: translate(-50%, -30px) rotate(360deg);
-        }
-      }
-    </style>
-
-    <script>
       const birthdayImage = document.getElementById("birthday-image");
       const birthdayCap = document.getElementById("birthday-cap");
 
